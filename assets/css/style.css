@@ -47,6 +47,18 @@ h6 {
     height: 48px;
     margin-right: 5px;
 }
+.fa-circle-xmark {
+    display: none;
+}
+.filter-results button:hover {
+    font-weight: 700;
+}
+.filter-results button:hover i.fa-xmark {
+    display: none;
+}
+.filter-results button:hover i.fa-circle-xmark {
+    display: block;
+}
 
 .card {
     border-radius: 21px;
@@ -74,9 +86,6 @@ h6 {
     font-size: 14px;
 }
 
-.filters .dropdown .btn {
-    min-width: 196px;
-}
 
 .dropdown-menu .input-group-text {
     position: absolute;
