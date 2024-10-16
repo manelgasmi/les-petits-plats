@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Les petits plats</title>
+    <link href="./assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Anton&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap"
+      rel="stylesheet"
+    />
+    <link href="./assets/css/style.css" rel="stylesheet" />
+  </head>
+
+  <body>
+    <main>
+      <div class="px-4 py-5 text-center header-bg">
+        <header class="row container">
+          <div class="col-3">
+            <img src="./assets/images/Logo.png" />
+          </div>
+        </header>
+        <div
+          class="col-lg-8 mx-auto px-5 d-flex flex-column justify-content-center header-content"
+        >
+          <h1 class="text-yellow page-title my-5">
+            CHERCHEZ PARMI PLUS DE 1500 RECETTES
+            <br />
+            DU QUOTIDIEN, SIMPLES ET DÉLICIEUSES
+          </h1>
+          <form class="search-form">
+            <div class="form-group h-100">
+              <input
+                type="text"
+                class="form-control h-100"
+                placeholder="Rechercher une recette, un ingrédient, ..."
+              />
+            </div>
+            <div class="text-end h-100">
+              <button class="btn btn-dark" type="submit">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <section class="container mt-4 filters">
+        <div class="row">
+          <div class="col-lg-2 col-sm-6 mb-3">
+            <div class="dropdown">
+              <button
+                class="btn btn-light w-100 d-flex justify-content-between align-items-center"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <span>Ingrédients</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="input-group p-2">
+                  <input type="text" class="form-control" />
+                  <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
+                <a class="dropdown-item" href="#">Jus de citron</a>
+                <a class="dropdown-item" href="#">Glaçon</a>
+                <a class="dropdown-item" href="#">Tomate</a>
+              </div>
+              <div class="filter-results mt-4">
+                <button
+                  class="btn w-100 d-flex justify-content-between align-items-center mb-3"
+                >
+                  <span>Crème de coco</span>
+                </button>
+                <button
+                  class="btn w-100 d-flex justify-content-between align-items-center mb-3"
+                >
+                  <span>Crème de coco</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-sm-6 mb-3">
+            <div class="dropdown">
+              <button
+                class="btn btn-light w-100 d-flex justify-content-between align-items-center"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <span>Ingrédients</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="input-group p-2">
+                  <input type="text" class="form-control" />
+                  <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
+                <a class="dropdown-item" href="#">Jus de citron</a>
+                <a class="dropdown-item" href="#">Glaçon</a>
+                <a class="dropdown-item" href="#">Tomate</a>
+              </div>
+              <div class="filter-results mt-4">
+                <button
+                  class="btn w-100 d-flex justify-content-between align-items-center mb-3"
+                >
+                  <span>Crème de coco</span>
+                </button>
+                <button
+                  class="btn w-100 d-flex justify-content-between align-items-center mb-3"
+                >
+                  <span>Crème de coco</span>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2 col-sm-6 mb-3">
+            <div class="dropdown">
+              <button
+                class="btn btn-light w-100 d-flex justify-content-between align-items-center"
+                type="button"
+                id="dropdownMenuButton"
+                data-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <span>Ingrédients</span>
+                <i class="fa-solid fa-chevron-down"></i>
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <div class="input-group p-2">
+                  <input type="text" class="form-control" />
+                  <span class="input-group-text">
+                    <i class="fa fa-search"></i>
+                  </span>
+                </div>
+                <a class="dropdown-item" href="#">Jus de citron</a>
+                <a class="dropdown-item" href="#">Glaçon</a>
+                <a class="dropdown-item" href="#">Tomate</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-6 col-sm-6 text-end">
+            <h3 class="mt-2">1500 recettes</h3>
+          </div>
+        </div>
+      </section>
+      <section class="container mt-5 mb-5 pb-5">
+        <div class="row">
+          <div class="col-lg-4 col-sm-6">
+            <div class="card">
+              <span class="position-absolute badge rounded-pill text-bg-warning"
+                >10 min</span
+              >
+              <div class="card-header p-0">
+                <img
+                  class="card-img-top"
+                  src="./assets/images/recettes/Recette01.jpg"
+                  alt="Card image cap"
+                />
+              </div>
+              <div class="card-body fs-14">
+                <h5 class="card-title my-3">Limonade de coco</h5>
+                <p class="card-subtitle mt-4 mb-2 text-muted text-uppercase">
+                  Recette
+                </p>
+                <p class="card-text">
+                  Mettre les glaçons à votre goût dans le blender, Ajouter le
+                  lait la crème de coco, le jus de 2 citrons et le sucre
+                  ensemble. Mixer jusqu'à obtenir la consistance désirée.
+                </p>
+
+                <p class="card-subtitle mt-4 mb-2 text-muted text-uppercase">
+                  Ingrédients
+                </p>
+                <div class="row">
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <div class="card">
+              <div class="card-header p-0">
+                <img
+                  class="card-img-top"
+                  src="./assets/images/recettes/Recette01.jpg"
+                  alt="Card image cap"
+                />
+              </div>
+              <div class="card-body fs-14">
+                <h5 class="card-title my-3">Limonade de coco</h5>
+                <p class="card-subtitle mt-4 mb-2 text-muted text-uppercase">
+                  Recette
+                </p>
+                <p class="card-text">
+                  Mettre les glaçons à votre goût dans le blender, Ajouter le
+                  lait la crème de coco, le jus de 2 citrons et le sucre
+                  ensemble. Mixer jusqu'à obtenir la consistance désirée.
+                </p>
+
+                <p class="card-subtitle mt-4 mb-2 text-muted text-uppercase">
+                  Ingrédients
+                </p>
+                <div class="row">
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-4 col-sm-6">
+            <div class="card">
+              <div class="card-header p-0">
+                <img
+                  class="card-img-top"
+                  src="./assets/images/recettes/Recette01.jpg"
+                  alt="Card image cap"
+                />
+              </div>
+              <div class="card-body fs-14">
+                <h5 class="card-title my-3">Limonade de coco</h5>
+                <p class="card-subtitle mt-4 mb-2 text-muted text-uppercase">
+                  Recette
+                </p>
+                <p class="card-text">
+                  Mettre les glaçons à votre goût dans le blender, Ajouter le
+                  lait la crème de coco, le jus de 2 citrons et le sucre
+                  ensemble. Mixer jusqu'à obtenir la consistance désirée.
+                </p>
+
+                <p class="card-subtitle mt-4 mb-2 text-muted text-uppercase">
+                  Ingrédients
+                </p>
+                <div class="row">
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                  <div class="col-6 mb-4">
+                    <span class="fs-6 fw-bold">Lait de coco</span>
+                    <br />
+                    <span class="fs-6 text-black-50">400ml</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>

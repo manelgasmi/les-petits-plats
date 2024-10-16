@@ -1,0 +1,89 @@
+body {
+    font-family: "Manrope", serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    background-color: #EDEDED;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: "Anton", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+.header-bg {
+    background-image: url('../images/lampos-aritonang-24gR_9lCdes-unsplash\ 1.png');
+    background-size: cover;
+}
+
+.header-content {
+    height: 550px;
+}
+
+.header-content .btn:active,
+.filter-results .btn {
+    background-color: #FFD15B;
+    color: #000;
+    border: none;
+}
+
+.text-yellow {
+    color: #FFD15B;
+}
+
+.page-title {
+    font-size: 2.75rem;
+}
+
+.search-form button {
+    margin-top: -85px;
+    z-index: 10;
+    position: relative;
+    height: 48px;
+    margin-right: 5px;
+}
+
+.card {
+    border-radius: 21px;
+    overflow: hidden;
+}
+
+.card-header img {
+    height: 253px;
+    overflow: hidden;
+    object-fit: cover;
+}
+
+.card-subtitle.text-muted {
+    font-size: 12px;
+    color: #7A7A7A;
+    font-weight: 400;
+}
+
+.card .badge {
+    margin-left: 78%;
+    margin-top: 15px;
+}
+
+.fs-14 {
+    font-size: 14px;
+}
+
+.filters .dropdown .btn {
+    min-width: 196px;
+}
+
+.dropdown-menu .input-group-text {
+    position: absolute;
+    background-color: transparent;
+    border: 0 none;
+    margin-left: 73% !important;
+    margin-top: 5px;
+    color: #dedede;
+    z-index: 10;
+}
