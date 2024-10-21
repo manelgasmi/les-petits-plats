@@ -63,6 +63,7 @@ h6 {
 .card {
     border-radius: 21px;
     overflow: hidden;
+    border: none;
 }
 
 .card-header img {
