@@ -9,7 +9,7 @@ export class Recipe {
         this.time = recipeData.time;
         this.description = recipeData.description;
         this.appliance = recipeData.appliance;
-        this.ustensiles = recipeData.ustensiles;
+        this.ustensils = recipeData.ustensils;
         this.image = recipeData.image;
     }
 }
