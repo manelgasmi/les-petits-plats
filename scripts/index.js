@@ -6,7 +6,7 @@ import { Filter } from "./classes/filter.js";
 
 class App {
   filterChoices = null;
-  filterNames = ['ingredients', 'appliances', 'ustensils'];
+  filterNames = ["ingredients", "appliances", "ustensils"];
   constructor() {
     this.filterChoices = new Filter();
   }
@@ -25,14 +25,16 @@ class App {
     // construire les filtres
     this.buildfilters(filtersData);
 
-    // ajouter le listner sur le click des boutons pour ouvrir les menus 
+    // ajouter le listner sur le click des boutons pour ouvrir les menus
     this.initFilterButtonAction();
 
     //ajouter le listner sur les champs de recherche des menus du filtre
-    this.initFilterSearchAction(filtersData);
+    this.initFilterSearchAction(filtersData, recipes);
 
     // ajouter le listner sur le click sur les éléments des menus des filtres (choix des ingredients, ...)
     this.initFilterChoiceAction();
+
+   
   }
 
   // ajouter les recipes dans le DOM
@@ -102,16 +104,19 @@ class App {
   }
 
   buildfilters(filtersData) {
-    this.filterNames.forEach(filterName => {
-        this.buildFilter(filtersData[filterName], filterName);
+    this.filterNames.forEach((filterName) => {
+      this.buildFilter(filtersData[filterName], filterName);
     });
   }
 
   buildFilter(values, menuName) {
-    const menuElement = document.querySelector(`.${menuName}-menu .dropdown-menu-items`);
+    const menuElement = document.querySelector(
+      `.${menuName}-menu .dropdown-menu-items`
+    );
     menuElement.innerHTML = "";
+    const uniqueValues = [...new Set(values)]; // supprimer les doublons des items
 
-    values.forEach((value) => {
+    uniqueValues.forEach((value) => {
       const menuItem = document.createElement("a");
       menuItem.classList.add("dropdown-item");
       menuItem.setAttribute("href", "#filters");
@@ -127,8 +132,8 @@ class App {
       selectItem.addEventListener("click", (event) => {
         const clickedValue = event.target.textContent;
         const filterName = event.target.dataset.filterName;
-        if(!this.filterChoices[filterName].includes(clickedValue)) {
-            this.filterChoices[filterName].push(clickedValue);
+        if (!this.filterChoices[filterName].includes(clickedValue)) {
+          this.filterChoices[filterName].push(clickedValue);
         }
         const dropdownMenu = event.target.closest(".dropdown-menu");
         dropdownMenu.style.display = "none";
@@ -137,12 +142,14 @@ class App {
       });
     });
   }
-    
+
   // afficher / cacher les menus des filtres
   initFilterButtonAction() {
     const filtersButtons = document.querySelectorAll(".filter-button");
     filtersButtons.forEach((filtersButton) => {
       filtersButton.addEventListener("click", (event) => {
+        this.closeAllDropdowns();
+
         const dopdownMenu = event.target
           .closest(".dropdown")
           .querySelector(".dropdown-menu");
@@ -168,7 +175,7 @@ class App {
     });
   }
 
-  initFilterSearchAction(filtersData) {
+  initFilterSearchAction(filtersData, recipes) {
     let filteredData = [];
     const filterInputs = document.querySelectorAll(
       ".filters input.form-control"
@@ -192,37 +199,69 @@ class App {
         }
 
         if (event.target.classList.contains("ustensils-input")) {
-          filteredData = filtersDataustensils.filter((data) =>
+          filteredData = filtersData.ustensils.filter((data) =>
             data.includes(searchText)
           );
           this.buildFilter(filteredData, "ustensils");
         }
 
         this.initFilterChoiceAction();
+         // filtrer les recettes selon le texte de recherche
+        this.filterRecipes(searchText, recipes);
       });
     });
   }
 
-  executeFilter(arrayFilter, recipes) {
-    // fitrer les recettes
+  // afficher les recettes filtrées
+  filterRecipes(searchText, recipes) {
+    searchText = searchText.toLowerCase();
+    const filteredRecipes = recipes.filter((recipe) => {
+      const recipeNameMatch = recipe.name.toLowerCase().includes(searchText);
+      const ingredientsMatch = recipe.ingredients && recipe.ingredients.some((ingredient) =>
+        ingredient.ingredient.toLowerCase().includes(searchText)
+      );
+      const ustensilsMatch = recipe.ustensils && recipe.ustensils.some((ustensil) =>
+        ustensil.toLowerCase().includes(searchText)
+      );
+      const appliancesMatch = recipe.appliances && recipe.appliance.some((appliance) =>
+        appliance.toLowerCase().includes(searchText)
+      );
+      if (recipeNameMatch || ingredientsMatch || ustensilsMatch || appliancesMatch) {
+        return recipe;
+      }
+    });
+    const recipesContainer = document.querySelector(".recipes .row");
+    recipesContainer.innerHTML = "";
+    this.buildRecipes(filteredRecipes);
+  }
 
-    // afficher les recettes filtrées
+  // afficher les recettes filtrées
+  executeFilter(recipes) {
     this.buildRecipes(recipes);
   }
 
   buildFilterResults(filterName) {
-    const filterResultElement = document.querySelector(`.filter-results-${filterName}`);
+    const filterResultElement = document.querySelector(
+      `.filter-results-${filterName}`
+    );
     filterResultElement.innerHTML = "";
     this.filterChoices[filterName].forEach((value) => {
-        const resultElement = document.createElement("button");
-        resultElement.classList =
-          "btn w-100 d-flex justify-content-between align-items-center mb-3";
-        resultElement.innerHTML = `                  
+      const resultElement = document.createElement("button");
+      resultElement.classList =
+        "btn w-100 d-flex justify-content-between align-items-center mb-3";
+      resultElement.innerHTML = `                  
             <span>${value}</span>
             <i class="fa-solid fa-xmark"></i>
             <i class="fa-solid fa-circle-xmark"></i>`;
-        filterResultElement.appendChild(resultElement);
-    })
+      filterResultElement.appendChild(resultElement);
+    });
+  }
+  //fermer tous les dropdowns si on ouvre un seul
+  closeAllDropdowns() {
+    const allDropdownsMenu = document.querySelectorAll(".dropdown-menu");
+    allDropdownsMenu.forEach((dropdown) => {
+      dropdown.style.display = "none";
+    });
   }
 }
 
