@@ -63,42 +63,74 @@ export class RecipeFactory {
   }
 
   filterRecipes(recipes, filterChoices) {
-    let searchTextMatch = false,
-      ingredientsMatch = false,
-      appliancesMatch = false,
-      ustensilsMatch = false;
-
     return recipes.filter((recipe) => {
-      //comparer le titre et la description et les ingrédient
-      //par rapport au contenu de la barre de recherche principale
+      let searchTextMatch = false,
+        ingredientsMatch = false,
+        appliancesMatch = false,
+        ustensilsMatch = false;
+
+      //comparer le titre, la description et les ingrédients
+      //par rapport au texte inséré dans la barre de recherche principale
       if (filterChoices.general) {
         const titleMatch = recipe.name
           .toLowerCase()
           .includes(filterChoices.general);
         const descriptionMatch = recipe.description
-          ?.toLowerCase()
+          .toLowerCase()
           .includes(filterChoices.general);
-        const ingredientMatch = recipe.ingredients.find((ingredient) =>
+
+        const ingredientSearchtMatch = recipe.ingredients.filter((ingredient) =>
           ingredient.ingredient.toLowerCase().includes(filterChoices.general)
         );
-        if (titleMatch || descriptionMatch || ingredientMatch) {
+        if (
+          titleMatch ||
+          descriptionMatch ||
+          ingredientSearchtMatch.length > 0
+        ) {
           searchTextMatch = true;
         }
+      } else {
+        searchTextMatch = true;
       }
 
       //comparer avec le filtre des ingrédient
       if (filterChoices.ingredients.length > 0) {
-        ingredientsMatch = filterChoices.ingredients.every(
-          (ingredientName) =>
-            recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase() === ingredientName)
+        ingredientsMatch = filterChoices.ingredients.every((ingredientName) =>
+          recipe.ingredients.some(
+            (ingredient) =>
+              ingredient.ingredient.toLowerCase() === ingredientName
+          )
         );
+      } else {
+        ingredientsMatch = true;
+      }
+
+      //comparer avec le filtre des appareils
+      if (filterChoices.appliances.length > 0) {
+        appliancesMatch = filterChoices.appliances.every(
+          (applianceName) => recipe.appliance.toLowerCase() === applianceName
+        );
+      } else {
+        appliancesMatch = true;
+      }
+
+      //comparer avec le filtre des ustenciles
+      if (filterChoices.ustensils.length > 0) {
+        ustensilsMatch = filterChoices.ustensils.every((ustensilName) =>
+          recipe.ustensils.some(
+            (ustensil) =>
+                ustensil.toLowerCase() === ustensilName
+          )
+        );
+      } else {
+        ustensilsMatch = true;
       }
 
       //retourner le résultat des 4 filtrers
       if (
-        searchTextMatch ||
-        ingredientsMatch ||
-        ustensilsMatch ||
+        searchTextMatch &&
+        ingredientsMatch &&
+        ustensilsMatch &&
         appliancesMatch
       ) {
         return recipe;
