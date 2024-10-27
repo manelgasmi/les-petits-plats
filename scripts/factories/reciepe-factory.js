@@ -1,6 +1,7 @@
 import { Recipe } from "../classes/reciepe.js";
 
 export class RecipeFactory {
+  recipes;
   //convertir le json des recipes en array de classes Recipe
   getRecipes(recipesData) {
     return recipesData.map((recipe) => new Recipe(recipe));
@@ -49,16 +50,53 @@ export class RecipeFactory {
       //remplissage des ustensils
       recipe.ustensils.forEach((ustensil) => {
         if (!ustensils.includes(ustensil)) {
-            ustensils.push(ustensil.toLowerCase());
+          ustensils.push(ustensil.toLowerCase());
         }
       });
-
     });
 
     return {
-        ingredients : ingredients,
-        appliances: appliances, 
-        ustensils: ustensils
+      ingredients: ingredients,
+      appliances: appliances,
+      ustensils: ustensils,
     };
+  }
+
+  filterRecipes(recipes, filterChoices) {
+    const filteredRecipes = [];
+    let searchTextMatch = false,
+      ingredientsMatch = false,
+      appliancesMatch = false,
+      ustensilsMatch = false;
+
+    filteredRecipes = recipes.filter((recipe) => {
+      //comparer le titre et la description et les ingrédient 
+      //par rapport au contenu de la barre de recherche principale
+      if (filterChoices.general) {
+        const titleMatch = recipe.name
+          .toLowerCase()
+          .includes(filterChoices.general);
+        const descriptionMatch = recipe.description
+          ?.toLowerCase()
+          .includes(filterChoices.general);
+        const ingredientMatch = recipe.ingredients.find((ingredient) =>
+          ingredient.ingredient.includes(filterChoices.general)
+        );
+        if (titleMatch || descriptionMatch || ingredientMatch) {
+            searchTextMatch = true;
+        }
+      }
+
+      //retourner le résultat des 4 filtrers
+      if (
+        searchTextMatch ||
+        ingredientsMatch ||
+        ustensilsMatch ||
+        appliancesMatch
+      ) {
+        return recipe;
+      }
+    });
+    return filteredRecipes;
   }
 }

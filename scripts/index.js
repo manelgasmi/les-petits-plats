@@ -6,24 +6,27 @@ import { Filter } from "./classes/filter.js";
 
 class App {
   filterChoices = null;
+  recipes = [];
   filterNames = ["ingredients", "appliances", "ustensils"];
+
   constructor() {
+    // récuperer la liste des Recipes
+    const recipeFactory = new RecipeFactory();
+    this.recipes = recipeFactory.getRecipes(recipesData);
     this.filterChoices = new Filter();
   }
 
   init() {
-    // récuperer la liste des Recipes
-    const recipeFactory = new RecipeFactory();
-    const recipes = recipeFactory.getRecipes(recipesData);
 
     // récupérer les valeurs des filtres
+    const recipeFactory = new RecipeFactory();
     const filtersData = recipeFactory.getFilters(recipes);
 
     // afficher les recettes
-    this.buildRecipes(recipes);
+    this.buildRecipes(this.recipes);
 
     // construire les filtres
-    this.buildfilters(filtersData);
+    this.buildfilters(this.recipes);
 
     // ajouter le listner sur le click des boutons pour ouvrir les menus
     this.initFilterButtonAction();
@@ -103,7 +106,11 @@ class App {
     return ingredientsElements;
   }
 
-  buildfilters(filtersData) {
+  buildfilters(recipes) {
+    // récupérer les valeurs des filtres
+    const recipeFactory = new RecipeFactory();
+    const filtersData = recipeFactory.getFilters(recipes);
+
     this.filterNames.forEach((filterName) => {
       this.buildFilter(filtersData[filterName], filterName);
     });
@@ -130,18 +137,26 @@ class App {
     const selectItems = document.querySelectorAll(".dropdown-item");
     selectItems.forEach((selectItem) => {
       selectItem.addEventListener("click", (event) => {
-        const clickedValue = event.target.textContent;
+        const clickedValue = event.target.textContent.toLowerCase();
         const filterName = event.target.dataset.filterName;
+
+        // ajouter le choix dans l'array de filterChoices
         if (!this.filterChoices[filterName].includes(clickedValue)) {
           this.filterChoices[filterName].push(clickedValue);
         }
+
+        //cacher le menu
         const dropdownMenu = event.target.closest(".dropdown-menu");
         dropdownMenu.style.display = "none";
 
-        this.buildFilterResults(filterName);
+        this.whenFilterChanged();
+        
       });
+      
     });
+    
   }
+ 
 
   // afficher / cacher les menus des filtres
   initFilterButtonAction() {
@@ -213,26 +228,30 @@ class App {
   }
 
   // afficher les recettes filtrées
+
   filterRecipes(searchText, recipes) {
+    if (!searchText) return;
     searchText = searchText.toLowerCase();
     const filteredRecipes = recipes.filter((recipe) => {
-      const recipeNameMatch = recipe.name.toLowerCase().includes(searchText);
+      const recipeNameMatch = recipe.name?.toLowerCase().includes(searchText);
       const ingredientsMatch = recipe.ingredients && recipe.ingredients.some((ingredient) =>
-        ingredient.ingredient.toLowerCase().includes(searchText)
+        ingredient.ingredient?.toLowerCase().includes(searchText)
       );
       const ustensilsMatch = recipe.ustensils && recipe.ustensils.some((ustensil) =>
-        ustensil.toLowerCase().includes(searchText)
+        ustensil?.toLowerCase().includes(searchText)
       );
       const appliancesMatch = recipe.appliances && recipe.appliance.some((appliance) =>
-        appliance.toLowerCase().includes(searchText)
+        appliance?.toLowerCase().includes(searchText)
       );
       if (recipeNameMatch || ingredientsMatch || ustensilsMatch || appliancesMatch) {
         return recipe;
       }
+      
     });
     const recipesContainer = document.querySelector(".recipes .row");
     recipesContainer.innerHTML = "";
     this.buildRecipes(filteredRecipes);
+    
   }
 
   // afficher les recettes filtrées
@@ -256,12 +275,54 @@ class App {
       filterResultElement.appendChild(resultElement);
     });
   }
+
+  //fermer les éléments choisis
+  deleteFilterChoicesAction() {
+    const filterChoices = document.querySelectorAll('.filter-results button');
+    filterChoices.forEach((choice) => {
+        choice.addEventListener('click', () => {
+
+        const filterName = choice.dataset.filterName;
+        const choiceValue = choice.textContent.toLowerCase();
+
+        if (this.filterChoices [filterName]) {
+            this.filterChoices[filterName] =this.filterChoices[filterName].filter(item => item !== choiceValue);
+        }
+        choice.remove();
+        console.log(filterName);
+        
+
+        this.filterRecipes(document.querySelectorAll('.form-control').value, this.recipes)
+            });
+        });
+    }
+        
+
   //fermer tous les dropdowns si on ouvre un seul
   closeAllDropdowns() {
     const allDropdownsMenu = document.querySelectorAll(".dropdown-menu");
     allDropdownsMenu.forEach((dropdown) => {
       dropdown.style.display = "none";
     });
+  }
+
+  filterChoicesChanged() {
+    // filtrer les recettes
+    const recipeFactory = new RecipeFactory();
+    const filteredRecipes = recipeFactory.filterRecipes(this.recipes, this.filterChoices);
+
+    //afficher les recettes filtrées
+    this.buildRecipes(filteredRecipes);
+
+    //reconstuire les filtres suivant les recettes filtées
+
+
+    //afficher le nombre de résultat
+    
+    
+    this.buildFilterResults(filterName);
+    // this.filterRecipes();
+    // this.deleteFilterChoicesAction();
   }
 }
 
