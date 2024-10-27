@@ -63,14 +63,13 @@ export class RecipeFactory {
   }
 
   filterRecipes(recipes, filterChoices) {
-    const filteredRecipes = [];
     let searchTextMatch = false,
       ingredientsMatch = false,
       appliancesMatch = false,
       ustensilsMatch = false;
 
-    filteredRecipes = recipes.filter((recipe) => {
-      //comparer le titre et la description et les ingrédient 
+    return recipes.filter((recipe) => {
+      //comparer le titre et la description et les ingrédient
       //par rapport au contenu de la barre de recherche principale
       if (filterChoices.general) {
         const titleMatch = recipe.name
@@ -80,11 +79,19 @@ export class RecipeFactory {
           ?.toLowerCase()
           .includes(filterChoices.general);
         const ingredientMatch = recipe.ingredients.find((ingredient) =>
-          ingredient.ingredient.includes(filterChoices.general)
+          ingredient.ingredient.toLowerCase().includes(filterChoices.general)
         );
         if (titleMatch || descriptionMatch || ingredientMatch) {
-            searchTextMatch = true;
+          searchTextMatch = true;
         }
+      }
+
+      //comparer avec le filtre des ingrédient
+      if (filterChoices.ingredients.length > 0) {
+        ingredientsMatch = filterChoices.ingredients.every(
+          (ingredientName) =>
+            recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase() === ingredientName)
+        );
       }
 
       //retourner le résultat des 4 filtrers
@@ -97,6 +104,5 @@ export class RecipeFactory {
         return recipe;
       }
     });
-    return filteredRecipes;
   }
 }

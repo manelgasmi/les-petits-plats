@@ -20,7 +20,7 @@ class App {
 
     // récupérer les valeurs des filtres
     const recipeFactory = new RecipeFactory();
-    const filtersData = recipeFactory.getFilters(recipes);
+    const filtersData = recipeFactory.getFilters(this.recipes);
 
     // afficher les recettes
     this.buildRecipes(this.recipes);
@@ -32,7 +32,7 @@ class App {
     this.initFilterButtonAction();
 
     //ajouter le listner sur les champs de recherche des menus du filtre
-    this.initFilterSearchAction(filtersData, recipes);
+    this.initFilterSearchAction(filtersData, this.recipes);
 
     // ajouter le listner sur le click sur les éléments des menus des filtres (choix des ingredients, ...)
     this.initFilterChoiceAction();
@@ -306,11 +306,11 @@ class App {
     });
   }
 
-  filterChoicesChanged() {
+  whenFilterChanged() {
     // filtrer les recettes
     const recipeFactory = new RecipeFactory();
     const filteredRecipes = recipeFactory.filterRecipes(this.recipes, this.filterChoices);
-
+    console.log(filteredRecipes)
     //afficher les recettes filtrées
     this.buildRecipes(filteredRecipes);
 
