@@ -80,6 +80,15 @@ class App {
 
       recipesContainer.appendChild(article);
     });
+    // le cas de 0 recette à afficher
+    if (recipes.length === 0) {
+      const errorMessageElement = document.createElement("p");
+      const searchTextElement = document.querySelector("input");
+      errorMessageElement.textContent = `Aucune recette ne contient "${searchTextElement.value}" vous pouvez chercher «
+      tarte aux pommes », « poisson », etc.`;
+      errorMessageElement.classList = "text-center";
+      recipesContainer.appendChild(errorMessageElement);
+    }
   }
 
   // construire les éléments html pour les ingredients dans la recette
@@ -325,9 +334,8 @@ class App {
         this.filterChoices[filterName] = this.filterChoices[filterName].filter(
           (item) => item !== choiceValue
         );
-        
-        this.whenFilterChanged();
 
+        this.whenFilterChanged();
       });
     });
   }
@@ -339,7 +347,6 @@ class App {
       this.recipes,
       this.filterChoices
     );
-    console.log(filteredRecipes);
 
     // afficher les recettes filtrées
     this.buildRecipes(filteredRecipes);
