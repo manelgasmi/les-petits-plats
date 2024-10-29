@@ -1,7 +1,7 @@
 import { Recipe } from "../classes/reciepe.js";
 
 export class RecipeFactory {
-  recipes;
+  
   //convertir le json des recipes en array de classes Recipe
   getRecipes(recipesData) {
     return recipesData.map((recipe) => new Recipe(recipe));

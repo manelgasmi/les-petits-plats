@@ -17,7 +17,6 @@ class App {
   }
 
   init() {
-
     // récupérer les valeurs des filtres
     const recipeFactory = new RecipeFactory();
     const filtersData = recipeFactory.getFilters(this.recipes);
@@ -37,10 +36,8 @@ class App {
     //ajouter le listner sur les champs de recherche des menus du filtre
     this.initFilterSearchAction(filtersData, this.recipes);
 
-    // ajouter le listner sur le click sur les éléments des menus des filtres (choix des ingredients, ...)
-    this.initFilterChoiceAction();
-
-   
+    // afficher le nombre total des recettes après le filtre
+    this.displayTotalRecipes(this.recipes);
   }
 
   // ajouter les recipes dans le DOM
@@ -118,6 +115,8 @@ class App {
     this.filterNames.forEach((filterName) => {
       this.buildFilter(filtersData[filterName], filterName);
     });
+
+    this.initFilterChoiceAction();
   }
 
   buildFilter(values, menuName) {
@@ -154,13 +153,9 @@ class App {
         dropdownMenu.style.display = "none";
 
         this.whenFilterChanged();
-        
       });
-      
     });
-    
   }
- 
 
   // afficher / cacher les menus des filtres
   initFilterButtonAction() {
@@ -172,10 +167,7 @@ class App {
         const dopdownMenu = event.target
           .closest(".dropdown")
           .querySelector(".dropdown-menu");
-        if (
-          dopdownMenu.style.display === "none" ||
-          dopdownMenu.style.display === ""
-        ) {
+        if (dopdownMenu.style.display === "none") {
           dopdownMenu.style.display = "block";
         } else {
           dopdownMenu.style.display = "none";
@@ -194,24 +186,30 @@ class App {
     });
   }
 
-  // initialiser le addEventListener pour la recherche principale
-  initGeneralSearchAction() {
-    const generalSearchInput = document.querySelector('form.search-form input');
-    generalSearchInput.addEventListener("input", (event) => {
-        const searchText = event.target.value.toLowerCase();
-
-        //ne rien faire si le texte est inférieur à 3 caractères
-        if(searchText.length < 3) {
-            return;
-        }
-        
-        this.filterChoices.general = searchText;
-
-        this.whenFilterChanged()
-
+  //fermer tous les dropdowns si on ouvre un seul
+  closeAllDropdowns() {
+    const allDropdownsMenu = document.querySelectorAll(".dropdown-menu");
+    allDropdownsMenu.forEach((dropdown) => {
+      dropdown.style.display = "none";
     });
   }
 
+  // initialiser le addEventListener pour la recherche principale
+  initGeneralSearchAction() {
+    const generalSearchInput = document.querySelector("form.search-form input");
+    generalSearchInput.addEventListener("input", (event) => {
+      const searchText = event.target.value.toLowerCase();
+
+      //ne rien faire si le texte est inférieur à 3 caractères
+      if (searchText.length < 3) {
+        return;
+      }
+
+      this.filterChoices.general = searchText;
+
+      this.whenFilterChanged();
+    });
+  }
 
   initFilterSearchAction(filtersData, recipes) {
     let filteredData = [];
@@ -244,7 +242,7 @@ class App {
         }
 
         this.initFilterChoiceAction();
-         // filtrer les recettes selon le texte de recherche
+        // filtrer les recettes selon le texte de recherche
         this.filterRecipes(searchText, recipes);
       });
     });
@@ -257,24 +255,33 @@ class App {
     searchText = searchText.toLowerCase();
     const filteredRecipes = recipes.filter((recipe) => {
       const recipeNameMatch = recipe.name?.toLowerCase().includes(searchText);
-      const ingredientsMatch = recipe.ingredients && recipe.ingredients.some((ingredient) =>
-        ingredient.ingredient?.toLowerCase().includes(searchText)
-      );
-      const ustensilsMatch = recipe.ustensils && recipe.ustensils.some((ustensil) =>
-        ustensil?.toLowerCase().includes(searchText)
-      );
-      const appliancesMatch = recipe.appliances && recipe.appliance.some((appliance) =>
-        appliance?.toLowerCase().includes(searchText)
-      );
-      if (recipeNameMatch || ingredientsMatch || ustensilsMatch || appliancesMatch) {
+      const ingredientsMatch =
+        recipe.ingredients &&
+        recipe.ingredients.some((ingredient) =>
+          ingredient.ingredient?.toLowerCase().includes(searchText)
+        );
+      const ustensilsMatch =
+        recipe.ustensils &&
+        recipe.ustensils.some((ustensil) =>
+          ustensil?.toLowerCase().includes(searchText)
+        );
+      const appliancesMatch =
+        recipe.appliances &&
+        recipe.appliance.some((appliance) =>
+          appliance?.toLowerCase().includes(searchText)
+        );
+      if (
+        recipeNameMatch ||
+        ingredientsMatch ||
+        ustensilsMatch ||
+        appliancesMatch
+      ) {
         return recipe;
       }
-      
     });
     const recipesContainer = document.querySelector(".recipes .row");
     recipesContainer.innerHTML = "";
     this.buildRecipes(filteredRecipes);
-    
   }
 
   // afficher les recettes filtrées
@@ -282,59 +289,59 @@ class App {
     this.buildRecipes(recipes);
   }
 
-  buildFilterResults(filterName) {
-    const filterResultElement = document.querySelector(
-      `.filter-results-${filterName}`
-    );
-    filterResultElement.innerHTML = "";
-    this.filterChoices[filterName].forEach((value) => {
-      const resultElement = document.createElement("button");
-      resultElement.classList =
-        "btn w-100 d-flex justify-content-between align-items-center mb-3";
-      resultElement.innerHTML = `                  
-            <span>${value}</span>
-            <i class="fa-solid fa-xmark"></i>
-            <i class="fa-solid fa-circle-xmark"></i>`;
-      filterResultElement.appendChild(resultElement);
+  // afficher les résultats des choix des 3 filtres
+  buildFilterResults() {
+    this.filterNames.forEach((filterName) => {
+      const filterResultElement = document.querySelector(
+        `.filter-results-${filterName}`
+      );
+      filterResultElement.innerHTML = "";
+      this.filterChoices[filterName].forEach((value) => {
+        const resultElement = document.createElement("button");
+        resultElement.classList =
+          "btn w-100 d-flex justify-content-between align-items-center mb-3";
+        resultElement.innerHTML = `                  
+                <span>${value}</span>
+                <i class="fa-solid fa-xmark"></i>
+                <i class="fa-solid fa-circle-xmark"></i>`;
+        resultElement.dataset.filterName = filterName;
+        filterResultElement.appendChild(resultElement);
+      });
     });
+    this.deleteFilterChoicesAction();
+  }
+
+  displayTotalRecipes(recipes) {
+    const recipesCountElement = document.querySelector(".recipe-count");
+    recipesCountElement.textContent = `${recipes.length} recettes`;
   }
 
   //fermer les éléments choisis
   deleteFilterChoicesAction() {
-    const filterChoices = document.querySelectorAll('.filter-results button');
+    const filterChoices = document.querySelectorAll(".filter-results button");
     filterChoices.forEach((choice) => {
-        choice.addEventListener('click', () => {
-
+      choice.addEventListener("click", () => {
         const filterName = choice.dataset.filterName;
-        const choiceValue = choice.textContent.toLowerCase();
+        const choiceValue = choice.textContent.trim().toLowerCase();
 
-        if (this.filterChoices [filterName]) {
-            this.filterChoices[filterName] =this.filterChoices[filterName].filter(item => item !== choiceValue);
-        }
-        choice.remove();
-        console.log(filterName);
+        this.filterChoices[filterName] = this.filterChoices[filterName].filter(
+          (item) => item !== choiceValue
+        );
         
+        this.whenFilterChanged();
 
-        this.filterRecipes(document.querySelectorAll('.form-control').value, this.recipes)
-            });
-        });
-    }
-        
-
-  //fermer tous les dropdowns si on ouvre un seul
-  closeAllDropdowns() {
-    const allDropdownsMenu = document.querySelectorAll(".dropdown-menu");
-    allDropdownsMenu.forEach((dropdown) => {
-      dropdown.style.display = "none";
+      });
     });
   }
 
   whenFilterChanged() {
-
     // filtrer les recettes
     const recipeFactory = new RecipeFactory();
-    const filteredRecipes = recipeFactory.filterRecipes(this.recipes, this.filterChoices);
-    console.log(filteredRecipes)
+    const filteredRecipes = recipeFactory.filterRecipes(
+      this.recipes,
+      this.filterChoices
+    );
+    console.log(filteredRecipes);
 
     // afficher les recettes filtrées
     this.buildRecipes(filteredRecipes);
@@ -342,13 +349,11 @@ class App {
     //reconstuire les filtres suivant les recettes filtées
     this.buildfilters(filteredRecipes);
 
+    // afficher les résultats des choix des 3 filtres
+    this.buildFilterResults();
 
     //afficher le nombre de résultat
-    
-    
-    // this.buildFilterResults(filterName);
-    // this.filterRecipes();
-    // this.deleteFilterChoicesAction();
+    this.displayTotalRecipes(filteredRecipes);
   }
 }
 
