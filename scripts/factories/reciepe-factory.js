@@ -7,29 +7,6 @@ export class RecipeFactory {
     return recipesData.map((recipe) => new Recipe(recipe));
   }
 
-  getAppliances(recipes) {
-    const appliances = [];
-    recipes.forEach((recipe) => {
-      if (!appliances.includes(recipe.appliance)) {
-        appliances.push(recipe.appliance);
-      }
-    });
-    return appliances;
-  }
-
-  getIngredients(recipes) {
-    const ingredients = [];
-    recipes.forEach((recipe) => {
-      recipe.ingredients.forEach((ingredient) => {
-        if (!ingredients.includes(ingredient.ingredient)) {
-          ingredients.push(ingredient.ingredient);
-        }
-      });
-    });
-
-    return ingredients;
-  }
-
   getFilters(recipes) {
     const ingredients = [];
     const appliances = [];

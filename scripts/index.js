@@ -1,6 +1,4 @@
 import { recipesData } from "./recipes.js";
-import { Recipe } from "./classes/reciepe.js";
-import { Ingredient } from "./classes/ingredient.js";
 import { RecipeFactory } from "./factories/reciepe-factory.js";
 import { Filter } from "./classes/filter.js";
 
