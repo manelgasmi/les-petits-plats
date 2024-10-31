@@ -8,7 +8,7 @@ class App {
   filterNames = ["ingredients", "appliances", "ustensils"];
 
   constructor() {
-    // récuperer la liste des Recipes
+    // récupérer la liste des Recipes
     const recipeFactory = new RecipeFactory();
     this.recipes = recipeFactory.getRecipes(recipesData);
     this.filterChoices = new Filter();
@@ -70,6 +70,7 @@ class App {
                         <div class="row ingredients-container"></div>
                     </div>
                 </div>`;
+      //afficher la liste des ingrédients
       const ingredientsContainer = article.querySelector(
         ".ingredients-container"
       );
@@ -125,7 +126,7 @@ class App {
 
     this.initFilterChoiceAction();
   }
-
+  // ajouter les items dans le menu correspondant
   buildFilter(values, menuName) {
     const menuElement = document.querySelector(
       `.${menuName}-menu .dropdown-menu-items`
@@ -142,7 +143,7 @@ class App {
       menuElement.appendChild(menuItem);
     });
   }
-
+  // choisir un item qui sera affiché sous chaque catégorie de filtre
   initFilterChoiceAction() {
     const selectItems = document.querySelectorAll(".dropdown-item");
     selectItems.forEach((selectItem) => {
@@ -209,10 +210,10 @@ class App {
 
       //ne rien faire si le texte est inférieur à 3 caractères
       if (searchText.length < 3) {
-        return;
+        this.filterChoices.general = "";
+      } else {
+        this.filterChoices.general = searchText;
       }
-
-      this.filterChoices.general = searchText;
 
       this.whenFilterChanged();
     });

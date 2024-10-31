@@ -7,6 +7,7 @@ export class RecipeFactory {
     return recipesData.map((recipe) => new Recipe(recipe));
   }
 
+
   getFilters(recipes) {
     const ingredients = [];
     const appliances = [];
@@ -41,7 +42,7 @@ export class RecipeFactory {
 
   filterRecipes(recipes, filterChoices) {
     return recipes.filter((recipe) => {
-      let searchTextMatch = false,
+        let searchTextMatch = false,
         ingredientsMatch = false,
         appliancesMatch = false,
         ustensilsMatch = false;
@@ -66,11 +67,12 @@ export class RecipeFactory {
         ) {
           searchTextMatch = true;
         }
+      // Si aucun texte de recherche n’est fourni
       } else {
         searchTextMatch = true;
       }
 
-      //comparer avec le filtre des ingrédient
+      //comparer avec le filtre des ingrédients
       if (filterChoices.ingredients.length > 0) {
         ingredientsMatch = filterChoices.ingredients.every((ingredientName) =>
           recipe.ingredients.some(
@@ -78,6 +80,7 @@ export class RecipeFactory {
               ingredient.ingredient.toLowerCase() === ingredientName
           )
         );
+      // si auncun ingrédient n'est précisé dans le filtre
       } else {
         ingredientsMatch = true;
       }
@@ -87,11 +90,12 @@ export class RecipeFactory {
         appliancesMatch = filterChoices.appliances.every(
           (applianceName) => recipe.appliance.toLowerCase() === applianceName
         );
+     
       } else {
         appliancesMatch = true;
       }
 
-      //comparer avec le filtre des ustenciles
+      //comparer avec le filtre des ustensiles
       if (filterChoices.ustensils.length > 0) {
         ustensilsMatch = filterChoices.ustensils.every((ustensilName) =>
           recipe.ustensils.some(
@@ -103,7 +107,7 @@ export class RecipeFactory {
         ustensilsMatch = true;
       }
 
-      //retourner le résultat des 4 filtrers
+      //retourner le résultat des 4 filtres
       if (
         searchTextMatch &&
         ingredientsMatch &&
