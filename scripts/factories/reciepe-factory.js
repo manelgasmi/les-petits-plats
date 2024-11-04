@@ -1,12 +1,10 @@
 import { Recipe } from "../classes/reciepe.js";
 
 export class RecipeFactory {
-  
   //convertir le json des recipes en array de classes Recipe
   getRecipes(recipesData) {
     return recipesData.map((recipe) => new Recipe(recipe));
   }
-
 
   getFilters(recipes) {
     const ingredients = [];
@@ -41,8 +39,10 @@ export class RecipeFactory {
   }
 
   filterRecipes(recipes, filterChoices) {
-    return recipes.filter((recipe) => {
-        let searchTextMatch = false,
+    let filtredRecipes = [];
+    for (let i = 0; i < recipes.length; i++) {
+      const recipe = recipes[i];
+      let searchTextMatch = false,
         ingredientsMatch = false,
         appliancesMatch = false,
         ustensilsMatch = false;
@@ -50,59 +50,87 @@ export class RecipeFactory {
       //comparer le titre, la description et les ingrédients
       //par rapport au texte inséré dans la barre de recherche principale
       if (filterChoices.general) {
-        const titleMatch = recipe.name
+        let titleMatch = recipe.name
           .toLowerCase()
           .includes(filterChoices.general);
         const descriptionMatch = recipe.description
           .toLowerCase()
           .includes(filterChoices.general);
 
-        const ingredientSearchtMatch = recipe.ingredients.filter((ingredient) =>
-          ingredient.ingredient.toLowerCase().includes(filterChoices.general)
-        );
-        if (
-          titleMatch ||
-          descriptionMatch ||
-          ingredientSearchtMatch.length > 0
-        ) {
+        let ingredientSearchtMatch = false;
+        let j = 0;
+        while (j < recipe.ingredients.length && !ingredientSearchtMatch) {
+          if (
+            recipe.ingredients[j].ingredient
+              .toLowerCase()
+              .includes(filterChoices.general)
+          ) {
+            ingredientSearchtMatch = true;
+          }
+          j++;
+        }
+        if (titleMatch || descriptionMatch || ingredientSearchtMatch) {
           searchTextMatch = true;
         }
-      // Si aucun texte de recherche n’est fourni
+
+        // Si aucun texte de recherche n’est fourni
       } else {
         searchTextMatch = true;
       }
 
       //comparer avec le filtre des ingrédients
       if (filterChoices.ingredients.length > 0) {
-        ingredientsMatch = filterChoices.ingredients.every((ingredientName) =>
-          recipe.ingredients.some(
-            (ingredient) =>
-              ingredient.ingredient.toLowerCase() === ingredientName
-          )
-        );
-      // si auncun ingrédient n'est précisé dans le filtre
+        ingredientsMatch = true;
+        for (let e = 0; e < filterChoices.ingredients.length; e++) {
+          let ingredientFound = false;
+          for (let f = 0; f < recipe.ingredients.length; f++) {
+            if (
+              recipe.ingredients[f].ingredient.toLowerCase() ===
+              filterChoices.ingredients[e].toLowerCase()
+            ) {
+              ingredientFound = true;
+              break;
+            }
+          }
+
+          if (!ingredientFound) {
+            ingredientsMatch = false;
+            break;
+          }
+        }
       } else {
         ingredientsMatch = true;
       }
 
       //comparer avec le filtre des appareils
       if (filterChoices.appliances.length > 0) {
-        appliancesMatch = filterChoices.appliances.every(
-          (applianceName) => recipe.appliance.toLowerCase() === applianceName
-        );
-     
+        appliancesMatch = true;
+        let l = 0;
+        while (l < filterChoices.appliances.length && appliancesMatch) {
+          if (
+            recipe.appliance.toLowerCase() !==
+            filterChoices.appliances[l].toLowerCase()
+          ) {
+            appliancesMatch = false;
+          }
+          l++;
+        }
       } else {
         appliancesMatch = true;
       }
 
       //comparer avec le filtre des ustensiles
       if (filterChoices.ustensils.length > 0) {
-        ustensilsMatch = filterChoices.ustensils.every((ustensilName) =>
-          recipe.ustensils.some(
-            (ustensil) =>
-                ustensil.toLowerCase() === ustensilName
-          )
-        );
+        ustensilsMatch = true;
+        let m = 0;
+        while (m < filterChoices.ustensils.length && ustensilsMatch) {
+          if (
+            !recipe.ustensils.includes(filterChoices.ustensils[m].toLowerCase())
+          ) {
+            ustensilsMatch = false;
+          }
+          m++;
+        }
       } else {
         ustensilsMatch = true;
       }
@@ -114,8 +142,9 @@ export class RecipeFactory {
         ustensilsMatch &&
         appliancesMatch
       ) {
-        return recipe;
+        filtredRecipes.push(recipe);
       }
-    });
+    }
+    return filtredRecipes;
   }
 }
