@@ -155,6 +155,7 @@ class App {
         if (!this.filterChoices[filterName].includes(clickedValue)) {
           this.filterChoices[filterName].push(clickedValue);
         }
+console.log(this.filterChoices);
 
         //cacher le menu
         const dropdownMenu = event.target.closest(".dropdown-menu");
