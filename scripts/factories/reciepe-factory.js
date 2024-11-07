@@ -53,24 +53,31 @@ export class RecipeFactory {
         let titleMatch = recipe.name
           .toLowerCase()
           .includes(filterChoices.general);
-        const descriptionMatch = recipe.description
-          .toLowerCase()
-          .includes(filterChoices.general);
-
-        let ingredientSearchtMatch = false;
-        let j = 0;
-        while (j < recipe.ingredients.length && !ingredientSearchtMatch) {
-          if (
-            recipe.ingredients[j].ingredient
-              .toLowerCase()
-              .includes(filterChoices.general)
-          ) {
-            ingredientSearchtMatch = true;
-          }
-          j++;
-        }
-        if (titleMatch || descriptionMatch || ingredientSearchtMatch) {
+        if (titleMatch) {
           searchTextMatch = true;
+        } else {
+          const descriptionMatch = recipe.description
+            .toLowerCase()
+            .includes(filterChoices.general);
+          if (descriptionMatch) {
+            searchTextMatch = true;
+          } else {
+            let ingredientSearchtMatch = false;
+            let j = 0;
+            while (j < recipe.ingredients.length && !ingredientSearchtMatch) {
+              if (
+                recipe.ingredients[j].ingredient
+                  .toLowerCase()
+                  .includes(filterChoices.general)
+              ) {
+                ingredientSearchtMatch = true;
+              }
+              j++;
+            }
+            if (ingredientSearchtMatch) {
+              searchTextMatch = true;
+            }
+          }
         }
 
         // Si aucun texte de recherche n’est fourni
