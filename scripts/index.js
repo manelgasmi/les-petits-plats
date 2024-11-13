@@ -155,7 +155,6 @@ class App {
         if (!this.filterChoices[filterName].includes(clickedValue)) {
           this.filterChoices[filterName].push(clickedValue);
         }
-console.log(this.filterChoices);
 
         //cacher le menu
         const dropdownMenu = event.target.closest(".dropdown-menu");
@@ -171,27 +170,36 @@ console.log(this.filterChoices);
     const filtersButtons = document.querySelectorAll(".filter-button");
     filtersButtons.forEach((filtersButton) => {
       filtersButton.addEventListener("click", (event) => {
-        this.closeAllDropdowns();
-
         const dopdownMenu = event.target
           .closest(".dropdown")
           .querySelector(".dropdown-menu");
+        const chevron = event.target
+        .closest("button")
+        .querySelector(".chevron");
+
         if (dopdownMenu.style.display === "none") {
+          this.closeAllDropdowns();
           dopdownMenu.style.display = "block";
+          chevron.classList.remove('fa-chevron-down');
+          chevron.classList.add('fa-chevron-up');
         } else {
           dopdownMenu.style.display = "none";
+          chevron.classList.remove('fa-chevron-up');
+          chevron.classList.add('fa-chevron-down');
         }
       });
     });
 
     // fermer le menu si on clique dehors
-    window.addEventListener("click", function (event) {
+    window.addEventListener("click",  (event) => {
       let menus = document.querySelectorAll(".dropdown-menu");
       menus.forEach((menu) => {
         if (!event.target.closest(".dropdown")) {
           menu.style.display = "none";
+          this.closeDropdownsChevrons()
         }
       });
+      
     });
   }
 
@@ -201,12 +209,31 @@ console.log(this.filterChoices);
     allDropdownsMenu.forEach((dropdown) => {
       dropdown.style.display = "none";
     });
+    this.closeDropdownsChevrons()
   }
+
+  closeDropdownsChevrons() {
+    const chevrons = document.querySelectorAll(".chevron");
+    chevrons.forEach((chevron) => {
+      chevron.classList.remove('fa-chevron-up');
+      chevron.classList.add('fa-chevron-down');
+    });
+  }
+
 
   // initialiser le addEventListener pour la recherche principale
   initGeneralSearchAction() {
     const generalSearchInput = document.querySelector("form.search-form input");
     generalSearchInput.addEventListener("input", (event) => {
+
+      const regex = /^[a-zA-Z0-9 \-\'\(\)]*$/;
+      const value = event.target.value;
+
+      if (!regex.test(value)) {
+          // Supprimer le dernier caractère non valide
+          event.target.value = value.slice(0, -1);
+      }
+      
       const searchText = event.target.value.toLowerCase();
 
       //ne rien faire si le texte est inférieur à 3 caractères
@@ -215,8 +242,8 @@ console.log(this.filterChoices);
       } else {
         this.filterChoices.general = searchText;
       }
-
       this.whenFilterChanged();
+
     });
   }
 

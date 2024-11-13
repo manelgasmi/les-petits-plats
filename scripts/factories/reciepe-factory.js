@@ -46,7 +46,7 @@ export class RecipeFactory {
         ingredientsMatch = false,
         appliancesMatch = false,
         ustensilsMatch = false;
-
+      
       //comparer le titre, la description et les ingrédients
       //par rapport au texte inséré dans la barre de recherche principale
       if (filterChoices.general) {
@@ -65,7 +65,7 @@ export class RecipeFactory {
             const ingredientSearchtMatch = recipe.ingredients.filter((ingredient) =>
               ingredient.ingredient.toLowerCase().includes(filterChoices.general)
             )
-            if (ingredientSearchtMatch) {
+            if (ingredientSearchtMatch.length > 0) {
               searchTextMatch = true;
             }
           }
