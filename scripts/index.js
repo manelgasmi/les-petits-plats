@@ -224,7 +224,7 @@ class App {
     const generalSearchInput = document.querySelector("form.search-form input");
     generalSearchInput.addEventListener("input", (event) => {
       // Supprime les caractères non valides de la saisie
-      const regex = /^[a-zA-Z0-9 \-\'\(\)]*$/;
+      const regex = /^[a-zA-Z0-9 \-'()]*$/;
       const value = event.target.value;
 
       if (!regex.test(value)) {
