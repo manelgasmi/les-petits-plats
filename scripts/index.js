@@ -244,7 +244,7 @@ class App {
     });
   }
 
-  initFilterSearchAction(filtersData, recipes) {
+  initFilterSearchAction(filtersData) {
     let filteredData = [];
     const filterInputs = document.querySelectorAll(
       ".filters input.form-control"
@@ -275,46 +275,8 @@ class App {
         }
 
         this.initFilterChoiceAction();
-        // filtrer les recettes selon le texte de recherche
-        this.filterRecipes(searchText, recipes);
       });
     });
-  }
-
-  // afficher les recettes filtrées
-
-  filterRecipes(searchText, recipes) {
-    if (!searchText) return;
-    searchText = searchText.toLowerCase();
-    const filteredRecipes = recipes.filter((recipe) => {
-      const recipeNameMatch = recipe.name?.toLowerCase().includes(searchText);
-      const ingredientsMatch =
-        recipe.ingredients &&
-        recipe.ingredients.some((ingredient) =>
-          ingredient.ingredient?.toLowerCase().includes(searchText)
-        );
-      const ustensilsMatch =
-        recipe.ustensils &&
-        recipe.ustensils.some((ustensil) =>
-          ustensil?.toLowerCase().includes(searchText)
-        );
-      const appliancesMatch =
-        recipe.appliances &&
-        recipe.appliance.some((appliance) =>
-          appliance?.toLowerCase().includes(searchText)
-        );
-      if (
-        recipeNameMatch ||
-        ingredientsMatch ||
-        ustensilsMatch ||
-        appliancesMatch
-      ) {
-        return recipe;
-      }
-    });
-    const recipesContainer = document.querySelector(".recipes .row");
-    recipesContainer.innerHTML = "";
-    this.buildRecipes(filteredRecipes);
   }
 
   // afficher les recettes filtrées
