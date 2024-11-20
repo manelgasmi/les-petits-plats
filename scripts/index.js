@@ -5,20 +5,18 @@ import { Filter } from "./classes/filter.js";
 class App {
   filterChoices = null;
   recipes = [];
+  filteredRecipes = [];
   filterNames = ["ingredients", "appliances", "ustensils"];
 
   constructor() {
     // récupérer la liste des Recipes
     const recipeFactory = new RecipeFactory();
     this.recipes = recipeFactory.getRecipes(recipesData);
+    this.filteredRecipes = this.recipes;
     this.filterChoices = new Filter();
   }
 
   init() {
-    // récupérer les valeurs des filtres
-    const recipeFactory = new RecipeFactory();
-    const filtersData = recipeFactory.getFilters(this.recipes);
-
     // afficher les recettes
     this.buildRecipes(this.recipes);
 
@@ -32,7 +30,7 @@ class App {
     this.initGeneralSearchAction();
 
     //ajouter le listner sur les champs de recherche des menus du filtre
-    this.initFilterSearchAction(filtersData, this.recipes);
+    this.initFilterSearchAction();
 
     // afficher le nombre total des recettes après le filtre
     this.displayTotalRecipes(this.recipes);
@@ -198,6 +196,10 @@ class App {
           menu.style.display = "none";
           this.closeDropdownsChevrons();
         }
+        // vider le champs de recherche des filtres 
+        const inputfilterSearch = menu.querySelector('input.form-control')
+        inputfilterSearch.value = null;
+        this.buildfilters(this.filteredRecipes)
       });
     });
   }
@@ -244,7 +246,9 @@ class App {
     });
   }
 
-  initFilterSearchAction(filtersData) {
+  initFilterSearchAction() {
+    const recipeFactory = new RecipeFactory();
+    const filtersData = recipeFactory.getFilters(this.filteredRecipes);
     let filteredData = [];
     const filterInputs = document.querySelectorAll(
       ".filters input.form-control"
@@ -331,22 +335,24 @@ class App {
   whenFilterChanged() {
     // filtrer les recettes
     const recipeFactory = new RecipeFactory();
-    const filteredRecipes = recipeFactory.filterRecipes(
+    this.filteredRecipes = recipeFactory.filterRecipes(
       this.recipes,
       this.filterChoices
     );
 
     // afficher les recettes filtrées
-    this.buildRecipes(filteredRecipes);
+    this.buildRecipes(this.filteredRecipes);
 
     //reconstuire les filtres suivant les recettes filtées
-    this.buildfilters(filteredRecipes);
+    this.buildfilters(this.filteredRecipes);
+
+    this.initFilterSearchAction();
 
     // afficher les résultats des choix des 3 filtres
     this.buildFilterResults();
 
     //afficher le nombre de résultat
-    this.displayTotalRecipes(filteredRecipes);
+    this.displayTotalRecipes(this.filteredRecipes);
   }
 }
 
